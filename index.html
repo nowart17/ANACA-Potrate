@@ -1,166 +1,543 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ANACA — AI 시네마틱 카메라</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <style>
-    body {
-      font-family: 'Pretendard', system-ui, sans-serif;
-    }
-    .hero-bg {
-      background: radial-gradient(circle at 50% 30%, rgba(234, 179, 8, 0.15), transparent 60%);
-    }
-    .sdr-dial {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .sdr-dial:hover {
-      transform: scale(1.08) rotate(8deg);
-      filter: brightness(1.2);
-    }
-    .glow {
-      box-shadow: 0 0 60px -10px rgb(234 179 8),
-                  0 0 30px -5px rgb(234 179 8);
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>ANACA — AI Cinematic Camera OS</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;700&display=swap"
+rel="stylesheet"
+>
+
+<style>
+
+/* RESET */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#050505;
+  color:white;
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+}
+
+/* HERO */
+
+.hero{
+  min-height:100vh;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:60px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(244,231,125,0.08),
+      transparent 45%
+    ),
+    #050505;
+}
+
+.container{
+  width:100%;
+  max-width:1400px;
+
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:80px;
+  align-items:center;
+}
+
+/* LEFT */
+
+.tag{
+  display:inline-flex;
+
+  padding:10px 18px;
+
+  border-radius:999px;
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+
+  background:
+    rgba(255,255,255,0.04);
+
+  letter-spacing:2px;
+  font-size:12px;
+
+  color:#f4e77d;
+
+  margin-bottom:28px;
+}
+
+h1{
+  font-size:92px;
+  line-height:0.95;
+  letter-spacing:-4px;
+
+  margin-bottom:30px;
+
+  font-family:'Space Grotesk',sans-serif;
+}
+
+.highlight{
+  color:#f4e77d;
+}
+
+.description{
+  max-width:560px;
+
+  color:rgba(255,255,255,0.72);
+
+  font-size:20px;
+  line-height:1.8;
+
+  margin-bottom:42px;
+}
+
+/* BUTTONS */
+
+.buttons{
+  display:flex;
+  gap:18px;
+}
+
+.btn{
+  height:56px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0 28px;
+
+  border-radius:18px;
+
+  text-decoration:none;
+
+  transition:0.3s;
+}
+
+.primary-btn{
+  background:#f4e77d;
+  color:#111;
+  font-weight:700;
+}
+
+.primary-btn:hover{
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 0 40px rgba(244,231,125,0.25);
+}
+
+.secondary-btn{
+  border:
+    1px solid rgba(255,255,255,0.1);
+
+  color:white;
+
+  background:
+    rgba(255,255,255,0.03);
+}
+
+/* SDR DIAL */
+
+.right{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.dial{
+  width:520px;
+  height:520px;
+
+  border-radius:50%;
+
+  position:relative;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #1f1f1f 0%,
+      #0f0f0f 60%,
+      #050505 100%
+    );
+
+  border:
+    2px solid rgba(255,255,255,0.06);
+
+  box-shadow:
+    0 0 100px rgba(244,231,125,0.08),
+    inset 0 0 40px rgba(255,255,255,0.03);
+}
+
+.dial::before{
+  content:'';
+
+  position:absolute;
+  inset:24px;
+
+  border-radius:50%;
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+}
+
+.dial::after{
+  content:'';
+
+  position:absolute;
+  inset:60px;
+
+  border-radius:50%;
+
+  border:
+    1px solid rgba(255,255,255,0.04);
+}
+
+/* CENTER */
+
+.center{
+  position:absolute;
+
+  top:50%;
+  left:50%;
+
+  transform:
+    translate(-50%,-50%);
+
+  text-align:center;
+}
+
+.logo{
+  width:90px;
+  margin-bottom:16px;
+}
+
+.edition{
+  font-size:13px;
+  letter-spacing:4px;
+
+  color:#f4e77d;
+
+  margin-bottom:10px;
+}
+
+.sdr{
+  font-size:30px;
+  letter-spacing:10px;
+}
+
+.subtitle{
+  margin-top:12px;
+
+  font-size:12px;
+  letter-spacing:3px;
+
+  color:#7f7f7f;
+}
+
+/* RING TEXT */
+
+.ring-text{
+  position:absolute;
+  width:100%;
+  height:100%;
+
+  animation:
+    rotate 24s linear infinite;
+}
+
+.ring-text span{
+  position:absolute;
+
+  left:50%;
+  top:50%;
+
+  transform-origin:0 -230px;
+
+  font-size:14px;
+  letter-spacing:2px;
+
+  color:#bfbfbf;
+}
+
+@keyframes rotate{
+
+  from{
+    transform:rotate(0deg);
+  }
+
+  to{
+    transform:rotate(360deg);
+  }
+
+}
+
+/* BOTTOM */
+
+.bottom-bar{
+  position:absolute;
+
+  bottom:40px;
+  left:50%;
+
+  transform:
+    translateX(-50%);
+
+  display:flex;
+  gap:24px;
+
+  letter-spacing:2px;
+  font-size:14px;
+
+  color:#777;
+}
+
+.bottom-bar span:hover{
+  color:#f4e77d;
+  cursor:pointer;
+}
+
+/* WARNING */
+
+.ai-warning{
+  max-width:1200px;
+
+  margin:0 auto 120px auto;
+
+  padding:42px;
+
+  border-radius:28px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #141414,
+      #0d0d0d
+    );
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+}
+
+.notice-badge{
+  display:inline-flex;
+
+  padding:10px 16px;
+
+  border-radius:999px;
+
+  background:
+    rgba(255,255,255,0.06);
+
+  font-size:12px;
+  letter-spacing:2px;
+
+  margin-bottom:22px;
+}
+
+.ai-warning h2{
+  font-size:42px;
+  line-height:1.3;
+
+  margin-bottom:24px;
+}
+
+.ai-warning p{
+  max-width:900px;
+
+  color:rgba(255,255,255,0.72);
+
+  line-height:1.8;
+  font-size:17px;
+}
+
+.warning-highlight{
+  margin-top:30px;
+
+  color:#f4e77d;
+
+  font-size:28px;
+  font-weight:700;
+}
+
+/* MOBILE */
+
+@media(max-width:1100px){
+
+  .container{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  h1{
+    font-size:62px;
+  }
+
+  .description{
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .buttons{
+    justify-content:center;
+  }
+
+  .dial{
+    width:360px;
+    height:360px;
+  }
+
+  .ring-text span{
+    transform-origin:0 -155px;
+  }
+
+}
+
+</style>
 </head>
-<body class="bg-black text-white overflow-x-hidden">
-  <div class="min-h-screen hero-bg">
-    <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <span class="text-2xl font-bold tracking-tighter">ANACA</span>
-        </div>
-        <div class="hidden md:flex items-center gap-8 text-sm">
-          <a href="#" class="hover:text-yellow-400 transition">기능</a>
-          <a href="#" class="hover:text-yellow-400 transition">갤러리</a>
-          <a href="#" class="hover:text-yellow-400 transition">기술</a>
-          <a href="#" class="hover:text-yellow-400 transition">커뮤니티</a>
-        </div>
-      </div>
-    </nav>
 
-    <div class="max-w-7xl mx-auto px-6 pt-32 pb-20 grid md:grid-cols-2 gap-16 items-center">
-      <!-- Left Content -->
-      <div class="space-y-8">
-        <div class="inline-block bg-white/10 text-yellow-400 text-sm px-5 py-2 rounded-full border border-white/20">
-          AI 시네마틱 카메라 운영 체제
-        </div>
+<body>
 
-        <h1 class="text-6xl md:text-7xl font-bold leading-none tracking-tighter">
-          현실을 초월하여<br>
-          <span class="text-yellow-400">촬영하세요</span>
-        </h1>
+<section class="hero">
 
-        <p class="text-xl text-gray-300 max-w-lg">
-          ANACA는 AI 기반 이미지 생성을 영화 같은 카메라 경험으로 바꿉니다.<br>
-          단순한 엔지니어가 아닌, 영화감독처럼 장면을 연출하세요.
-        </p>
+  <div class="container">
 
-        <div class="flex flex-wrap gap-4">
-          <button onclick="startANACA()" 
-                  class="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-8 py-4 rounded-2xl text-lg transition flex items-center gap-3">
-            <i class="fas fa-play"></i>
-            ANACA를 시작하세요
-          </button>
-          
-          <button onclick="showSDRDial()" 
-                  class="border border-white/30 hover:border-white/60 font-medium px-8 py-4 rounded-2xl text-lg transition">
-            SDR 다이얼 살펴보기
-          </button>
-        </div>
+    <!-- LEFT -->
 
-        <div class="flex items-center gap-8 text-sm text-gray-400 pt-6">
-          <div>기초적인</div>
-          <div class="w-px h-6 bg-white/20"></div>
-          <div>찬성</div>
-          <div class="w-px h-6 bg-white/20"></div>
-          <div>사진관</div>
-          <div class="w-px h-6 bg-white/20"></div>
-          <div>감독</div>
-        </div>
+    <div class="left">
+
+      <div class="tag">
+        AI CINEMATIC CAMERA OPERATING SYSTEM
       </div>
 
-      <!-- Right Side - Realistic SDR Dial -->
-      <div class="relative flex justify-center md:justify-end">
-        <div class="relative">
-          <!-- Main Dial -->
-          <div id="dial" 
-               onclick="rotateDial()" 
-               class="sdr-dial w-80 h-80 rounded-full border-8 border-gray-800 bg-gradient-to-br from-gray-900 to-black shadow-2xl cursor-pointer relative glow">
-            
-            <!-- Outer Ring -->
-            <div class="absolute inset-4 rounded-full border-4 border-gray-700"></div>
-            
-            <!-- Inner Metal Look -->
-            <div class="absolute inset-8 rounded-full bg-gradient-to-br from-zinc-800 via-gray-900 to-black flex items-center justify-center">
-              
-              <!-- Center Logo -->
-              <div class="text-center">
-                <div class="text-yellow-400 text-3xl font-bold tracking-widest mb-1">SDR</div>
-                <div class="text-[10px] text-gray-500 tracking-widest">SONY DYNAMIC RANGE</div>
-                <div class="mt-6 text-red-500">
-                  <i class="fas fa-cube text-4xl"></i>
-                </div>
-              </div>
-            </div>
+      <h1>
+        Shoot <span class="highlight">Beyond</span><br>
+        Reality
+      </h1>
 
-            <!-- Dial Marks -->
-            <div class="absolute inset-0">
-              <!-- 12 marks -->
-              <% for(let i = 0; i < 12; i++) { %>
-                <div class="absolute w-1 h-6 bg-gray-400" 
-                     style="top: 12%; left: 50%; transform: rotate(<%= i * 30 %>deg) translateY(-140px); transform-origin: bottom center;">
-                </div>
-              <% } %>
-            </div>
+      <p class="description">
+        ANACA transforms AI image creation
+        into a cinematic camera experience.
+        Direct scenes like a filmmaker,
+        not a prompt engineer.
+      </p>
 
-            <!-- Highlight -->
-            <div class="absolute top-6 left-1/2 w-8 h-1 bg-white/60 rounded-full -translate-x-1/2 blur-sm"></div>
-          </div>
+      <div class="buttons">
 
-          <!-- Label -->
-          <div class="text-center mt-6">
-            <div class="inline-flex items-center gap-2 bg-white/5 px-5 py-2 rounded-full text-sm">
-              <span class="text-yellow-400">●</span>
-              <span class="font-medium">SDR 다이얼</span>
-            </div>
-          </div>
-        </div>
+        <a href="#" class="btn primary-btn">
+          Launch ANACA
+        </a>
+
+        <a href="#" class="btn secondary-btn">
+          Explore SDR Dial
+        </a>
+
       </div>
+
     </div>
+
+    <!-- RIGHT -->
+
+    <div class="right">
+
+      <div class="dial">
+
+        <div class="ring-text">
+
+          <span style="transform:rotate(0deg)">LIGHT</span>
+          <span style="transform:rotate(45deg)">MOOD</span>
+          <span style="transform:rotate(90deg)">DEPTH</span>
+          <span style="transform:rotate(135deg)">FOCUS</span>
+          <span style="transform:rotate(180deg)">COLOR</span>
+          <span style="transform:rotate(225deg)">MOTION</span>
+          <span style="transform:rotate(270deg)">ATMOSPHERE</span>
+          <span style="transform:rotate(315deg)">COMPOSITION</span>
+
+        </div>
+
+        <div class="center">
+
+          <div class="edition">
+            BASIC
+          </div>
+
+          <!-- LOGO IMAGE -->
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/3/36/Logo.min.svg"
+            class="logo"
+          />
+
+          <div class="sdr">
+            SDR
+          </div>
+
+          <div class="subtitle">
+            SCENE DIRECTION RING
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
-  <script>
-    function rotateDial() {
-      const dial = document.getElementById('dial');
-      dial.style.transform = 'rotate(360deg)';
-      setTimeout(() => {
-        dial.style.transition = 'none';
-        dial.style.transform = 'rotate(0deg)';
-        setTimeout(() => {
-          dial.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-        }, 50);
-      }, 600);
-    }
+  <div class="bottom-bar">
 
-    function showSDRDial() {
-      const dial = document.getElementById('dial');
-      dial.scrollIntoView({ behavior: "smooth" });
-      setTimeout(() => {
-        rotateDial();
-      }, 800);
-    }
+    <span>BASIC</span>
+    <span>PRO</span>
+    <span>STUDIO</span>
+    <span>DIRECTOR</span>
 
-    function startANACA() {
-      alert("🎥 ANACA 시네마틱 모드가 시작되었습니다!\n\n(실제 앱 연동 준비중)");
-    }
+  </div>
 
-    // Tailwind Script
-    document.documentElement.style.setProperty('--tw-ring-color', 'rgb(234 179 8)');
-  </script>
+</section>
+
+<!-- AI WARNING -->
+
+<section class="ai-warning">
+
+  <div class="notice-badge">
+    OFFICIAL NOTICE
+  </div>
+
+  <h2>
+    Excessive AI retouch may not be accepted
+    for official identification documents.
+  </h2>
+
+  <p>
+    Artificially modified or AI-generated facial images
+    can be rejected for passport, visa,
+    resident registration, and official identity systems.
+  </p>
+
+  <div class="warning-highlight">
+    Keep your real appearance.
+  </div>
+
+</section>
+
 </body>
 </html>
